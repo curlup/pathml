@@ -63,6 +63,7 @@ jobs:
         coverage xml
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v2
+      if: ${{ secrets.CODECOV_TOKEN }}
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         env_vars: OS,PYTHON
