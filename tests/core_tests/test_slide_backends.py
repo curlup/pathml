@@ -36,6 +36,11 @@ def dicom_backend():
         bioformats_backend(),
         bioformats_backend_qptiff(),
     ],
+    ids=[
+        'openslide',
+        'bioformats',
+        'bioformats_qptiff',
+    ]
 )
 @pytest.mark.parametrize("location", [(0, 0), (50, 60)])
 @pytest.mark.parametrize("size", [50, (50, 100)])
