@@ -40,8 +40,8 @@ def dicom_backend():
 @pytest.mark.parametrize("location", [(0, 0), (50, 60)])
 @pytest.mark.parametrize("size", [50, (50, 100)])
 @pytest.mark.parametrize("level", [None, 0])
-def test_extract_region(backend, location, size, level):
-    region = backend.extract_region(location=location, size=size, level=level)
+def test_extract_region(backend, location, size, level, benchmark):
+    region = benchmark(backend.extract_region, location=location, size=size, level=level)
     assert isinstance(region, np.ndarray)
     assert region.dtype == np.uint8
 
@@ -115,8 +115,8 @@ def test_extract_region_dicom(backend, location, size, level):
 )
 @pytest.mark.parametrize("pad", [True, False])
 @pytest.mark.parametrize("tile_shape", [500, (500, 500)])
-def test_tile_generator(backend, shape, tile_shape, pad):
-    tiles = list(backend.generate_tiles(shape=tile_shape, stride=500, pad=pad))
+def test_tile_generator(backend, shape, tile_shape, pad, benchmark):
+    tiles = benchmark(lambda: list(backend.generate_tiles(shape=tile_shape, stride=500, pad=pad)))
     tile_shape = (tile_shape, tile_shape) if isinstance(tile_shape, int) else tile_shape
     if not pad:
         assert len(tiles) == np.prod(
@@ -133,10 +133,10 @@ def test_tile_generator(backend, shape, tile_shape, pad):
 @pytest.mark.parametrize("pad", [True, False])
 @pytest.mark.parametrize("tile_shape", [500, (500, 500)])
 @pytest.mark.parametrize("level", [None, 0])
-def test_tile_generator_with_level(backend, shape, tile_shape, pad, level):
-    tiles = list(
+def test_tile_generator_with_level(backend, shape, tile_shape, pad, level, benchmark):
+    tiles = benchmark(lambda: list(
         backend.generate_tiles(shape=tile_shape, stride=500, pad=pad, level=level)
-    )
+    ))
     tile_shape = (tile_shape, tile_shape) if isinstance(tile_shape, int) else tile_shape
     if not pad:
         assert len(tiles) == np.prod(
