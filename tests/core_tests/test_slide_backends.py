@@ -117,6 +117,11 @@ def test_extract_region_dicom(backend, location, size, level):
         (dicom_backend(), (2638, 3236)),
         (bioformats_backend_qptiff(), (1920, 1440)),
     ],
+    ids=[
+        'bioformats-640-480',
+        'dicom-2638-3236',
+        'bioformats_qptiff-1920-1440',
+    ]
 )
 @pytest.mark.parametrize("pad", [True, False])
 @pytest.mark.parametrize("tile_shape", [500, (500, 500)])
